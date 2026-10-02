@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Telegram Flow</title>
+</head>
+<body>
+  <h1>Test Permisos</h1>
+
+  <button onclick="solicitar()">Solicitar permiso</button>
+
+  <script>
+    const userId = "user_4";
+
+    // ===== SSE =====
+    const evt = new EventSource("https://00a5ad6f-b511-4b34-beaf-7e1778703fbb.us-east-1.cloud.genez.io/events/" + userId);
+
+    evt.onmessage = (e) => {
+  const data = JSON.parse(e.data);
+
+  if (data.type === "animal_selected") {
+    alert("Elegiste: " + data.action);
+  }
+};
+
+
+
+    // ===== REQUEST =====
+    async function solicitar() {
+      await fetch("https://00a5ad6f-b511-4b34-beaf-7e1778703fbb.us-east-1.cloud.genez.io/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          userId
+        })
+      });
+
+      alert("Solicitud enviada 🚀");
+    }
+   
+  </script>
+</body>
+</html>

